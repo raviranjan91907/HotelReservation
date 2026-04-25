@@ -27,6 +27,7 @@ public class ReservationService {
     }
 
     public IRoom getARoom(String roomId) {
+
         return rooms.get(roomId);
     }
 

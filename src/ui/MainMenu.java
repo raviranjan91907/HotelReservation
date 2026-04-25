@@ -21,6 +21,7 @@ public class MainMenu {
             System.out.println("4. Admin");
             System.out.println("5. Exit");
 
+            System.out.println("-------------------------------------");
             int choice = Integer.parseInt(sc.nextLine());
 
             switch (choice) {
@@ -107,7 +108,7 @@ public class MainMenu {
 
 
                         //Room Booking
-                        System.out.println("Enter Room Number of Available Rooms");
+                        System.out.println("Enter Room Number you want to book");
                         String roomNo=sc.nextLine();
                         IRoom availableRoom= hotelResource.getRoom(roomNo);
                         Reservation res=hotelResource.bookARoom(email,availableRoom,in,out);
@@ -133,7 +134,7 @@ public class MainMenu {
 
     //Displaying all the Reservations
     private static void viewReservations() {
-        
+
         System.out.println("Email:");
         String email = sc.nextLine();
 

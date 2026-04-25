@@ -13,10 +13,10 @@ public class AdminMenu {
     public static void start() {
         while (true) {
             System.out.println("\n--- ADMIN MENU ---");
-            System.out.println("1. See all Customers");
-            System.out.println("2. See all Rooms");
-            System.out.println("3. See all Reservations");
-            System.out.println("4. Add a Room");
+            System.out.println("1. See All Customers");
+            System.out.println("2. See All Rooms");
+            System.out.println("3. See All Reservations");
+            System.out.println("4. Add A Room");
             System.out.println("5. Back");
 
             int choice = Integer.parseInt(scanner.nextLine());
@@ -49,11 +49,20 @@ public class AdminMenu {
     }
 
     private static void addRoom() {
-        System.out.println("Room Number:");
-        String number = scanner.nextLine();
+        String roomNumber;
+        double price;
+            System.out.println("Room Number:");
+            roomNumber = scanner.nextLine();
 
-        System.out.println("Price:");
-        double price = Double.parseDouble(scanner.nextLine());
+
+        while(true) {
+            System.out.println("Price:");
+            price = Double.parseDouble(scanner.nextLine());
+            if(price>=0){
+                break;
+            }
+            System.out.println("Invalid Room Price:\nRoom Price should be grater the 0");
+        }
 
         RoomType roomType;
         while(true) {
@@ -68,8 +77,8 @@ public class AdminMenu {
             }
         }
         IRoom room = (price == 0)
-                ? new FreeRoom(number, roomType)
-                : new Room(number, price, roomType);
+                ? new FreeRoom(roomNumber, roomType)
+                : new Room(roomNumber, price, roomType);
 
         admin.addRoom(room);
 
