@@ -17,8 +17,9 @@ public class AdminMenu {
             System.out.println("2. See All Rooms");
             System.out.println("3. See All Reservations");
             System.out.println("4. Add A Room");
-            System.out.println("5. Back");
-
+            System.out.println("5. Back to Main Menu");
+            System.out.println("----------------------------------");
+            System.out.println("Please Select a option:");
             int choice = Integer.parseInt(scanner.nextLine());
 
             switch (choice) {
@@ -49,39 +50,44 @@ public class AdminMenu {
     }
 
     private static void addRoom() {
-        String roomNumber;
-        double price;
+        boolean addAnotherRoom;
+        do {
+            String roomNumber;
+            double price;
             System.out.println("Room Number:");
             roomNumber = scanner.nextLine();
 
 
-        while(true) {
-            System.out.println("Price:");
-            price = Double.parseDouble(scanner.nextLine());
-            if(price>=0){
-                break;
+            while (true) {
+                System.out.println("Price:");
+                price = Double.parseDouble(scanner.nextLine());
+                if (price >= 0) {
+                    break;
+                }
+                System.out.println("Invalid Room Price:\nRoom Price should be grater the 0");
             }
-            System.out.println("Invalid Room Price:\nRoom Price should be grater the 0");
-        }
 
-        RoomType roomType;
-        while(true) {
-            System.out.println("Type (1-SINGLE, 2-DOUBLE):");
-            int type = Integer.parseInt(scanner.nextLine());
-            if(type==1 || type==2) {
-                roomType = (type == 1) ? RoomType.SINGLE : RoomType.DOUBLE;
-                break;
+            RoomType roomType;
+            while (true) {
+                System.out.println("Type (1-SINGLE, 2-DOUBLE):");
+                int type = Integer.parseInt(scanner.nextLine());
+                if (type == 1 || type == 2) {
+                    roomType = (type == 1) ? RoomType.SINGLE : RoomType.DOUBLE;
+                    break;
+                } else {
+                    System.out.println("Invalid input!");
+                }
             }
-            else{
-                System.out.println("Invalid input!");
-            }
-        }
-        IRoom room = (price == 0)
-                ? new FreeRoom(roomNumber, roomType)
-                : new Room(roomNumber, price, roomType);
+            IRoom room = (price == 0)
+                    ? new FreeRoom(roomNumber, roomType)
+                    : new Room(roomNumber, price, roomType);
 
-        admin.addRoom(room);
+            admin.addRoom(room);
 
-        System.out.println("Room added!");
+            System.out.println("Room added!");
+
+            System.out.println("Would like to add anther room (Y/N)");
+            addAnotherRoom=scanner.nextLine().equalsIgnoreCase("y") ? true : false;
+        }while(addAnotherRoom);
     }
 }

@@ -20,8 +20,9 @@ public class MainMenu {
             System.out.println("3. Create an account");
             System.out.println("4. Admin");
             System.out.println("5. Exit");
-
             System.out.println("-------------------------------------");
+            System.out.println("Please Select a option");
+
             int choice = Integer.parseInt(sc.nextLine());
 
             switch (choice) {
@@ -48,7 +49,7 @@ public class MainMenu {
 
     //create a new Account
     private static void createAccount() {
-        System.out.println("Email:");
+        System.out.println("Enter Email Format example@gmail.com:");
         String email = sc.nextLine();
 
         System.out.println("First Name:");
@@ -59,6 +60,7 @@ public class MainMenu {
 
         hotelResource.createACustomer(email, first, last);
         System.out.println("Account created!");
+        System.out.println("Welcome Hotel Application");
     }
 
     //findRoom rooms and booking
@@ -82,8 +84,10 @@ public class MainMenu {
 
                 //Displaying all the Available Room
                 System.out.println("Available Rooms: ");
+                int i=1;
                 for (IRoom room : rooms) {
-                    System.out.println(room);
+                    System.out.println(i+" "+room+"\n");
+                    i++;
                 }
 
 
@@ -102,7 +106,7 @@ public class MainMenu {
 
                         //Create Account if you don't have account
                         if(hotelResource.getCustomer(email)==null){
-                            System.out.println("you don't Account you have to create");
+                            System.out.println("you don't have any Account you have to create");
                             createAccount();
                         }
 

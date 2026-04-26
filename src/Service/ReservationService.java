@@ -72,7 +72,6 @@ public class ReservationService {
 
             return findRooms(newCheckIn, newCheckOut);
         }
-
         return available;
     }
 
