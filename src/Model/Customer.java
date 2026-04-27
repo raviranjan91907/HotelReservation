@@ -4,13 +4,16 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class Customer {
-    private String firstName;
-    private String lastName;
-    private String email;
+    private final String firstName;
+    private final String lastName;
+    private final String email;
 
     public Customer(String firstName, String lastName, String email) {
         if (!isValidEmail(email)) {
             throw new IllegalArgumentException("Invalid email format");
+        }
+        if((firstName==null || firstName.trim().isEmpty()) || (lastName==null || lastName.trim().isEmpty())){
+            throw new IllegalArgumentException("FirstName and LastName should not be empty ");
         }
         this.firstName = firstName;
         this.lastName = lastName;

@@ -20,59 +20,44 @@ public class ReservationService {
         return inst;
     }
 
-    public void addRoom(IRoom room) {
+    public boolean addRoom(IRoom room) {
         if (!rooms.containsKey(room.getRoomNumber())) {
             rooms.put(room.getRoomNumber(), room);
+            return true;
+        }
+        else{
+            return false;
         }
     }
 
     public IRoom getARoom(String roomId) {
-
         return rooms.get(roomId);
     }
 
     public Reservation reserveARoom(Customer customer, IRoom room, Date checkIn, Date checkOut) {
-        if (isRoomAvailable(room, checkIn, checkOut)) {
-            Reservation reservation = new Reservation(customer, room, checkIn, checkOut);
-            reservations.add(reservation);
-            return reservation;
-        }
-        return null;
-    }
-
-    private boolean isRoomAvailable(IRoom room, Date checkIn, Date checkOut) {
-        for (Reservation r : reservations) {
-            if (r.getRoom().equals(room)) {
-                if (!(checkOut.before(r.getCheckInDate()) || checkIn.after(r.getCheckOutDate()))) {
-                    return false;
-                }
+        for(Reservation reservation:reservations){
+            if(reservation.getRoom().equals(room) &&
+                    reservation.getCheckInDate().before(checkOut) &&
+                    reservation.getCheckOutDate().after(checkIn)){
+                throw new IllegalArgumentException("Room is already booked for these dates.");
             }
         }
-        return true;
+        Reservation newReservation=new Reservation(customer,room,checkIn,checkOut);
+        reservations.add(newReservation);
+        return newReservation;
     }
+
 
     public Collection<IRoom> findRooms(Date checkIn, Date checkOut) {
-        List<IRoom> available = new ArrayList<>();
+        List<IRoom> availableRooms = new ArrayList<>(rooms.values());
 
-        for (IRoom room : rooms.values()) {
-            if (isRoomAvailable(room, checkIn, checkOut)) {
-                available.add(room);
+        for(Reservation reservation:reservations){
+            if(reservation.getCheckInDate().before(checkOut) &&
+               reservation.getCheckOutDate().after(checkIn)){
+                availableRooms.remove(reservation.getRoom());
             }
         }
-
-        if (available.isEmpty()) {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(checkIn);
-            cal.add(Calendar.DATE, 7);
-            Date newCheckIn = cal.getTime();
-
-            cal.setTime(checkOut);
-            cal.add(Calendar.DATE, 7);
-            Date newCheckOut = cal.getTime();
-
-            return findRooms(newCheckIn, newCheckOut);
-        }
-        return available;
+        return availableRooms;
     }
 
     public Collection<Reservation> getCustomersReservation(Customer customer) {

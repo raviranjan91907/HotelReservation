@@ -33,7 +33,7 @@ public class AdminResource {
         reservationService.printAllReservation();
     }
 
-    public void addRoom(IRoom room) {
-        reservationService.addRoom(room);
+    public boolean addRoom(IRoom room) {
+        return reservationService.addRoom(room);
     }
 }
