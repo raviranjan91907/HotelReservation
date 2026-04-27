@@ -55,7 +55,9 @@ public class MainMenu {
                     break;
                 }
                 case 5 -> System.exit(0);
+                default -> System.out.println("Invalid Input");
             }
+
         }
     }
 
@@ -151,16 +153,30 @@ public class MainMenu {
         }
 
 
-        Collection<IRoom> rooms = hotelResource.findARoom(in, out);
+
 
 
 
         while(true){
         //Displaying all the Available Room
+        Collection<IRoom> rooms = hotelResource.findARoom(in, out);
+
         if(rooms.isEmpty()){
             System.out.println("No Rooms is Available");
-            break;
+
+            Calendar calendar=Calendar.getInstance();
+            calendar.setTime(in);
+            calendar.add(Calendar.DATE,7);
+            in=calendar.getTime();
+
+            calendar.setTime(out);
+            calendar.add(Calendar.DATE,7);
+            out=calendar.getTime();
+
+            rooms = hotelResource.findARoom(in, out);
+            System.out.println("You can Try Booking room on Date "+in+" to "+out);
         }
+
 
         System.out.println("Available Rooms: ");
         int i=1;
@@ -172,67 +188,65 @@ public class MainMenu {
 
         //Want to book a room or Not
         System.out.println("You want to book a room (Y/N)");
-                String booking=sc.nextLine();
-                if(booking.equalsIgnoreCase("y") || booking.equalsIgnoreCase("n")){
+        String booking=sc.nextLine();
+        if(booking.equalsIgnoreCase("y") || booking.equalsIgnoreCase("n")){
 
-                    if(booking.equalsIgnoreCase("n")) {
-                        break;
-                    }
-                    else{
-                        String email;
-                        while(true) {
-                            System.out.println("Enter your email");
-                            email = sc.nextLine();
-                            if(email==null || email.trim().isEmpty()){
-                                System.out.println("Email Should not be null");
-                                continue;
-                            }
-                            break;
-                        }
+        if(booking.equalsIgnoreCase("n")) {
+            break;
+        }
+        else{
+            String email;
+            while(true) {
+                System.out.println("Enter your email");
+                email = sc.nextLine();
+                if(email==null || email.trim().isEmpty()){
+                    System.out.println("Email Should not be null");
+                    continue;
+                }
+                break;
+            }
 
-                        //Create Account if you don't have account
-                        if(hotelResource.getCustomer(email)==null){
-                            System.out.println("you don't have any Account you have to create");
-                            createAccount();
-                        }
+            //Create Account if you don't have account
+            if(hotelResource.getCustomer(email)==null){
+                System.out.println("you don't have any Account you have to create");
+                createAccount();
+            }
 
 
                         //Room Booking
-                        while(true) {
-                            try {
-
-                                System.out.println("Enter Room Number you want to book");
-                                String roomNo = sc.nextLine();
-
-                                if(roomNo==null || roomNo.trim().isEmpty()) {
-                                    System.out.println("roomNo should not be empty");
-                                    continue;
-                                }
-
-                                IRoom availableRoom = hotelResource.getRoom(roomNo);
-
-                                if(availableRoom==null){
-                                    System.out.println("Room Dose not exist");
-                                    continue;
-                                }
-
-
-                                Reservation res = hotelResource.bookARoom(email, availableRoom, in, out);
-                                System.out.println(res.toString());
-                                System.out.println("Your room is Booked");
-                                break;
-
-                            }
-                            catch(IllegalArgumentException e){
-                                System.out.println(e.getMessage()+"\n"+"Try with different room");
-                            }
-                        }
+            while(true) {
+                try {
+                    System.out.println("Enter Room Number you want to book");
+                    String roomNo = sc.nextLine();
+                    if(roomNo==null || roomNo.trim().isEmpty()) {
+                        System.out.println("roomNo should not be empty");
+                        continue;
                     }
+
+                    IRoom availableRoom = hotelResource.getRoom(roomNo);
+
+                    if(availableRoom==null){
+                        System.out.println("Room Dose not exist");
+                        continue;
+                    }
+
+
+                    Reservation res = hotelResource.bookARoom(email, availableRoom, in, out);
+                    System.out.println(res.toString());
+                    System.out.println("Your room is Booked");
+                    break;
                 }
-                else{
-                    System.out.println("Invalid input!");
+                catch(IllegalArgumentException e){
+                    System.out.println(e.getMessage()+"\n"+"Try with different room");
                 }
             }
+        }
+        }
+        else{
+            System.out.println("Invalid input!");
+        }
+            System.out.println("----------------------------------------------------");
+        }
 
     }
 
@@ -242,9 +256,13 @@ public class MainMenu {
 
         System.out.println("Email:");
         String email = sc.nextLine();
-
+        int i=0;
         for (Reservation r : hotelResource.getCustomersReservations(email)) {
             System.out.println(r);
+            i++;
+        }
+        if(i==0){
+            System.out.println("no Reservation found or customer is not exist");
         }
     }
 }
