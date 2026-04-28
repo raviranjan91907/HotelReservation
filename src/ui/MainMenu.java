@@ -160,21 +160,37 @@ public class MainMenu {
         while(true){
         //Displaying all the Available Room
         Collection<IRoom> rooms = hotelResource.findARoom(in, out);
-
+        Date recommendedCheckInDate;
+        Date recommendedCheckoutDate;
         if(rooms.isEmpty()){
-            System.out.println("No Rooms is Available");
+            System.out.println("No Rooms is Available on Date "+in+" to "+out);
 
             Calendar calendar=Calendar.getInstance();
             calendar.setTime(in);
             calendar.add(Calendar.DATE,7);
-            in=calendar.getTime();
+            recommendedCheckInDate=calendar.getTime();
 
             calendar.setTime(out);
             calendar.add(Calendar.DATE,7);
-            out=calendar.getTime();
+            recommendedCheckoutDate=calendar.getTime();
 
-            rooms = hotelResource.findARoom(in, out);
-            System.out.println("You can Try Booking room on Date "+in+" to "+out);
+            rooms = hotelResource.findARoom(recommendedCheckInDate, recommendedCheckoutDate);
+
+
+
+            System.out.println("Do you want to Booking room on Date "+recommendedCheckInDate+" to "+recommendedCheckoutDate+" ? (Y/N)" );
+            if(sc.nextLine().equalsIgnoreCase("n")){
+                break;
+            }
+            else{
+                if(rooms.isEmpty()){
+                    System.out.println("No Available booking on Date "+recommendedCheckInDate+" to "+recommendedCheckoutDate);
+                    break;
+                }
+                in=recommendedCheckInDate;
+                out=recommendedCheckoutDate;
+            }
+
         }
 
 
@@ -245,7 +261,7 @@ public class MainMenu {
         else{
             System.out.println("Invalid input!");
         }
-            System.out.println("----------------------------------------------------");
+            System.out.println("\n----------------------------------------------------");
         }
 
     }
